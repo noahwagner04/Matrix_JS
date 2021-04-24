@@ -25,6 +25,22 @@ class Matrix {
 
 	}
 
+	getDeterminant3x3() {
+
+	}
+
+	getDeterminant2x2() {
+		if(this.rows !== this.cols) {
+			console.log("cannot find determinant of a non square matrix");
+			return;
+		} else if (this.rows > 2) {
+			console.log("cannot calculate determinant of a matrix with dimensions greater than 2x2 with this function, try using functions getDeterminant or getDeterminant3x3");
+			return;
+		} else {
+			return this.data[0][0] * this.data[1][1] - this.data[0][1] * this.data[1][0];
+		}
+	}
+
 	static getInverse(matrix) {
 
 	}
@@ -159,6 +175,18 @@ class Matrix {
 			return new Matrix(matrix.cols, matrix.rows)
 				.map((e, i, j) => matrix.data[j][i]);
 		}
+	}
+
+	static getIdentity(dimentions) {
+		let result = new Matrix(dimentions, dimentions);
+		result.map((e, i, j) => {
+			if(i === j) {
+				return 1;
+			} else {
+				return 0;
+			}
+		});
+		return result;
 	}
 
 	clone() {
