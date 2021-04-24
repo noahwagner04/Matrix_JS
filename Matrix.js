@@ -6,39 +6,161 @@ class Matrix {
 	}
 
 	setColumn(index, data) {
-
+		if (index >= this.cols || index < 0) {
+			console.log("cannot set column at unexisting index");
+			return;
+		} else if (data.length !== this.rows) {
+			console.log("cannot set column of length longer than matrix column length");
+			return;
+		} else {
+			this.map((e, i, j) => {
+				if (j === index) {
+					return data[i];
+				} else {
+					return e;
+				}
+			})
+		}
+		return this;
 	}
 
 	getColumn(index) {
-
+		let result = [];
+		if (index >= this.cols || index < 0) {
+			console.log("cannot set column at unexisting index");
+			return;
+		} else {
+			for (let i = 0; i < this.rows; i++) {
+				for (let j = 0; j < this.cols; j++) {
+					if(j === index) {
+						result.push(this.data[i][j]);
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	setRow(index, data) {
-
+		if (index >= this.rows || index < 0) {
+			console.log("cannot set row at unexisting index");
+			return;
+		} else if (data.length !== this.cols) {
+			console.log("cannot set row of length longer than matrix row length");
+			return;
+		} else {
+			this.map((e, i, j) => {
+				if (i === index) {
+					return data[j];
+				} else {
+					return e;
+				}
+			})
+		}
+		return this;
 	}
 
 	getRow(index) {
-
+		let result = [];
+		if (index >= this.rows || index < 0) {
+			console.log("cannot set row at unexisting index");
+			return;
+		} else {
+			for (let i = 0; i < this.rows; i++) {
+				for (let j = 0; j < this.cols; j++) {
+					if(i === index) {
+						result.push(this.data[i][j]);
+					}
+				}
+			}
+		}
+		return result;
 	}
 
-	getDeterminant() {
-
+	static getDeterminant(matrix) {
+		if(matrix.rows !== matrix.cols) {
+			console.log("cannot get determinant of a non square matrix");
+			return;
+		}
+		if(matrix.rows === 2 && matrix.cols === 2) {
+			return matrix.getDeterminant2x2();
+		} else {
+			let determinant = 0;
+			for (let i = 0; i < matrix.cols; i++) {
+				if(i % 2 === 0) {
+					determinant += matrix.data[0][i] * Matrix.getDeterminant(matrix.ignoreRowColumn(0, i));
+				} else {
+					determinant -= matrix.data[0][i] * Matrix.getDeterminant(matrix.ignoreRowColumn(0, i));
+				}
+			}
+			return determinant;
+		}
 	}
 
 	getDeterminant3x3() {
-
+		if (this.rows !== this.cols) {
+			console.log("cannot find determinant of a non square matrix");
+			return;
+		} else if (this.rows !== 3) {
+			console.log("cannot calculate determinant of a matrix with dimensions other than 3x3 with this function, try using functions getDeterminant or getDeterminant2x2");
+			return;
+		} else {
+			let a = this.data[0][0];
+			let b = this.data[0][1];
+			let c = this.data[0][2];
+			let d1 = new Matrix(2, 2).map((e, i, j) => this.data[i + 1][j + 1]).getDeterminant2x2();
+			let d2 = new Matrix(2, 2).map((e, i, j) => this.data[i + 1][j * 2]).getDeterminant2x2();
+			let d3 = new Matrix(2, 2).map((e, i, j) => this.data[i + 1][j]).getDeterminant2x2();
+			return a * d1 - b * d2 + c * d3;
+		}
 	}
 
 	getDeterminant2x2() {
-		if(this.rows !== this.cols) {
+		if (this.rows !== this.cols) {
 			console.log("cannot find determinant of a non square matrix");
 			return;
-		} else if (this.rows > 2) {
-			console.log("cannot calculate determinant of a matrix with dimensions greater than 2x2 with this function, try using functions getDeterminant or getDeterminant3x3");
+		} else if (this.rows !== 2) {
+			console.log("cannot calculate determinant of a matrix with dimensions other than 2x2 with this function, try using functions getDeterminant or getDeterminant3x3");
 			return;
 		} else {
 			return this.data[0][0] * this.data[1][1] - this.data[0][1] * this.data[1][0];
 		}
+	}
+
+	ignoreColumn(index) {
+		if (index >= this.cols || index < 0) {
+			console.log("cannot remove column at unexisting index");
+			return;
+		} else {
+			let result = new Matrix(this.cols - 1, this.rows);
+			result.data = [];
+			for (let i = 0; i < this.cols; i++) {
+				if(i !== index) {
+					result.data.push(this.getColumn(i));
+				}
+			}
+			return Matrix.transpose(result);
+		}
+	}
+
+	ignoreRow(index) {
+		if (index >= this.rows || index < 0) {
+			console.log("cannot remove row at unexisting index");
+			return;
+		} else {
+			let result = new Matrix(this.rows - 1, this.cols);
+			result.data = [];
+			for (let i = 0; i < this.rows; i++) {
+				if(i !== index) {
+					result.data.push(this.getRow(i));
+				}
+			}
+			return result;
+		}
+	}
+
+	ignoreRowColumn(rowIndex, colIndex) {
+		return this.ignoreRow(rowIndex).ignoreColumn(colIndex);
 	}
 
 	static getInverse(matrix) {
@@ -180,7 +302,7 @@ class Matrix {
 	static getIdentity(dimentions) {
 		let result = new Matrix(dimentions, dimentions);
 		result.map((e, i, j) => {
-			if(i === j) {
+			if (i === j) {
 				return 1;
 			} else {
 				return 0;
