@@ -5,6 +5,30 @@ class Matrix {
 		this.data = Array.from(new Array(this.rows), () => new Array(this.cols));
 	}
 
+	setColumn(index, data) {
+
+	}
+
+	getColumn(index) {
+
+	}
+
+	setRow(index, data) {
+
+	}
+
+	getRow(index) {
+
+	}
+
+	getDeterminant() {
+
+	}
+
+	static getInverse(matrix) {
+
+	}
+
 	add(value) {
 		if (value instanceof Matrix) {
 			if (value.rows !== this.rows || value.cols !== this.cols) {
