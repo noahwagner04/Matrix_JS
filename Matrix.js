@@ -77,7 +77,7 @@ class Matrix {
 		return result;
 	}
 
-	static getDeterminant(matrix) {
+	static getDeterminantOf(matrix) {
 		if (matrix.rows !== matrix.cols) {
 			console.log("cannot get determinant of a non square matrix");
 			return;
@@ -88,9 +88,9 @@ class Matrix {
 			let determinant = 0;
 			for (let i = 0; i < matrix.cols; i++) {
 				if (i % 2 === 0) {
-					determinant += matrix.data[0][i] * Matrix.getDeterminant(matrix.ignoreRowColumn(0, i));
+					determinant += matrix.data[0][i] * Matrix.getDeterminantOf(matrix.ignoreRowColumn(0, i));
 				} else {
-					determinant -= matrix.data[0][i] * Matrix.getDeterminant(matrix.ignoreRowColumn(0, i));
+					determinant -= matrix.data[0][i] * Matrix.getDeterminantOf(matrix.ignoreRowColumn(0, i));
 				}
 			}
 			return determinant;
@@ -102,7 +102,7 @@ class Matrix {
 			console.log("cannot find determinant of a non square matrix");
 			return;
 		} else if (this.rows !== 3) {
-			console.log("cannot calculate determinant of a matrix with dimensions other than 3x3 with this function, try using functions getDeterminant or getDeterminant2x2");
+			console.log("cannot calculate determinant of a matrix with dimensions other than 3x3 with this function, try using functions getDeterminantOf or getDeterminant2x2");
 			return;
 		} else {
 			let a = this.data[0][0];
@@ -120,7 +120,7 @@ class Matrix {
 			console.log("cannot find determinant of a non square matrix");
 			return;
 		} else if (this.rows !== 2) {
-			console.log("cannot calculate determinant of a matrix with dimensions other than 2x2 with this function, try using functions getDeterminant or getDeterminant3x3");
+			console.log("cannot calculate determinant of a matrix with dimensions other than 2x2 with this function, try using functions getDeterminantOf or getDeterminant3x3");
 			return;
 		} else {
 			return this.data[0][0] * this.data[1][1] - this.data[0][1] * this.data[1][0];
@@ -167,7 +167,7 @@ class Matrix {
 		if (this.rows !== this.cols) {
 			console.log("cannot invert a non square matrix");
 			return;
-		} else if (Matrix.getDeterminant(this) === 0) {
+		} else if (Matrix.getDeterminantOf(this) === 0) {
 			console.log("cannot invert a matrix with determinant of 0");
 			return;
 		} else {
@@ -205,7 +205,7 @@ class Matrix {
 		if (matrix.rows !== matrix.cols) {
 			console.log("cannot invert a non square matrix");
 			return;
-		} else if (Matrix.getDeterminant(matrix) === 0) {
+		} else if (Matrix.getDeterminantOf(matrix) === 0) {
 			console.log("cannot invert a matrix with determinant of 0");
 			return;
 		} else {
