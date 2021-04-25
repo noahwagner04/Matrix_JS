@@ -32,7 +32,7 @@ class Matrix {
 		} else {
 			for (let i = 0; i < this.rows; i++) {
 				for (let j = 0; j < this.cols; j++) {
-					if(j === index) {
+					if (j === index) {
 						result.push(this.data[i][j]);
 					}
 				}
@@ -68,7 +68,7 @@ class Matrix {
 		} else {
 			for (let i = 0; i < this.rows; i++) {
 				for (let j = 0; j < this.cols; j++) {
-					if(i === index) {
+					if (i === index) {
 						result.push(this.data[i][j]);
 					}
 				}
@@ -78,16 +78,16 @@ class Matrix {
 	}
 
 	static getDeterminant(matrix) {
-		if(matrix.rows !== matrix.cols) {
+		if (matrix.rows !== matrix.cols) {
 			console.log("cannot get determinant of a non square matrix");
 			return;
 		}
-		if(matrix.rows === 2 && matrix.cols === 2) {
+		if (matrix.rows === 2 && matrix.cols === 2) {
 			return matrix.getDeterminant2x2();
 		} else {
 			let determinant = 0;
 			for (let i = 0; i < matrix.cols; i++) {
-				if(i % 2 === 0) {
+				if (i % 2 === 0) {
 					determinant += matrix.data[0][i] * Matrix.getDeterminant(matrix.ignoreRowColumn(0, i));
 				} else {
 					determinant -= matrix.data[0][i] * Matrix.getDeterminant(matrix.ignoreRowColumn(0, i));
@@ -135,7 +135,7 @@ class Matrix {
 			let result = new Matrix(this.cols - 1, this.rows);
 			result.data = [];
 			for (let i = 0; i < this.cols; i++) {
-				if(i !== index) {
+				if (i !== index) {
 					result.data.push(this.getColumn(i));
 				}
 			}
@@ -151,7 +151,7 @@ class Matrix {
 			let result = new Matrix(this.rows - 1, this.cols);
 			result.data = [];
 			for (let i = 0; i < this.rows; i++) {
-				if(i !== index) {
+				if (i !== index) {
 					result.data.push(this.getRow(i));
 				}
 			}
@@ -163,8 +163,127 @@ class Matrix {
 		return this.ignoreRow(rowIndex).ignoreColumn(colIndex);
 	}
 
-	static getInverse(matrix) {
+	invert() {
+		if (this.rows !== this.cols) {
+			console.log("cannot invert a non square matrix");
+			return;
+		} else if (Matrix.getDeterminant(this) === 0) {
+			console.log("cannot invert a matrix with determinant of 0");
+			return;
+		} else {
+			let result = Matrix.identity(this.rows);
+			for (let i = 0; i < this.cols; i++) {
+				if (this.data[i][i] === 0) {
+					for (let j = 0; j < this.rows; j++) {
+						if (j === i) continue;
+						else if (this.data[j][i] !== 0) {
+							this.swapRows(j, i);
+							result.swapRows(j, i);
+						}
+					}
+				}
+				// 2(a)
+				let multNum = 1 / this.data[i][i];
+				this.multiplyRowByConst(i, multNum);
+				result.multiplyRowByConst(i, multNum);
+				for (let j = 0; j < this.rows; j++) {
+					if (j === i) continue;
+					else {
+						let numToMakeNull = this.data[j][i];
+						this.addMultipleOfRow(j, i, -numToMakeNull);
+						this.data[j][i] = 0;
+						result.addMultipleOfRow(j, i, -numToMakeNull);
+					}
+				}
+			}
+			this.data = result.data;
+			return this;
+		}
+	}
 
+	static getInverseOf(matrix) {
+		if (matrix.rows !== matrix.cols) {
+			console.log("cannot invert a non square matrix");
+			return;
+		} else if (Matrix.getDeterminant(matrix) === 0) {
+			console.log("cannot invert a matrix with determinant of 0");
+			return;
+		} else {
+			let result = Matrix.identity(matrix.rows);
+			let matrixClone = matrix.clone();
+			for (let i = 0; i < matrixClone.cols; i++) {
+				if (matrixClone.data[i][i] === 0) {
+					for (let j = 0; j < matrixClone.rows; j++) {
+						if (j === i) continue;
+						else if (matrixClone.data[j][i] !== 0) {
+							matrixClone.swapRows(j, i);
+							result.swapRows(j, i);
+						}
+					}
+				}
+				// 2(a)
+				let multNum = 1 / matrixClone.data[i][i];
+				matrixClone.multiplyRowByConst(i, multNum);
+				result.multiplyRowByConst(i, multNum);
+				for (let j = 0; j < matrixClone.rows; j++) {
+					if (j === i) continue;
+					else {
+						let numToMakeNull = matrixClone.data[j][i];
+						matrixClone.addMultipleOfRow(j, i, -numToMakeNull);
+						result.addMultipleOfRow(j, i, -numToMakeNull);
+					}
+				}
+			}
+			return result;
+		}
+	}
+
+	// row elementary operations
+	swapRows(r1, r2) {
+		if (r1 >= this.rows || r2 >= this.rows || r1 < 0 || r2 < 0) {
+			console.log("cannot swap unexisting rows, index out of range")
+			return;
+		} else {
+			let row1 = this.getRow(r1);
+			let row2 = this.getRow(r2);
+
+			this.setRow(r1, row2);
+			this.setRow(r2, row1);
+		}
+		return this;
+	}
+
+	multiplyRowByConst(r, constant) {
+		if (r < 0 || r >= this.rows) {
+			console.log("cannot multiply unexisting row by " + constant + ", index out of range");
+			return;
+		} else {
+			this.map((e, i, j) => {
+				if (i === r) {
+					return e * constant;
+				} else {
+					return e;
+				}
+			});
+		}
+		return this;
+	}
+
+	addMultipleOfRow(r1, r2, constant) {
+		if (r1 >= this.rows || r2 >= this.rows || r1 < 0 || r2 < 0) {
+			console.log("cannot cannot apply operation on unexisting rows, index out of range");
+			return;
+		} else {
+			let row = this.getRow(r2);
+			this.map((e, i, j) => {
+				if (i === r1) {
+					return e + row[j] * constant;
+				} else {
+					return e;
+				}
+			});
+		}
+		return this;
 	}
 
 	add(value) {
@@ -299,7 +418,7 @@ class Matrix {
 		}
 	}
 
-	static getIdentity(dimentions) {
+	static identity(dimentions) {
 		let result = new Matrix(dimentions, dimentions);
 		result.map((e, i, j) => {
 			if (i === j) {
