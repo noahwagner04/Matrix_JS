@@ -286,6 +286,71 @@ class Matrix {
 		return this;
 	}
 
+	rotate(ax, ay = 0, az = 0) {
+		if (this.rows === 3) {
+			let result = Matrix.rotate3D(this, ax, ay, az);
+			this.data = result.data;
+			return this;
+		} else if (this.rows === 2) {
+			let result = Matrix.rotate2D(this, ax);
+			this.data = result.data;
+			return this;
+		} else {
+			console.log("cannot rotate matrix with number of rows other than 2 or 3");
+			return;
+		}
+	}
+
+	static rotate(matrix, ax, ay = 0, az = 0) {
+		if (matrix.rows === 3) {
+			let result = Matrix.rotate3D(matrix, ax, ay, az);
+			return result;
+		} else if (matrix.rows === 2) {
+			let result = Matrix.rotate2D(matrix, ax);
+			return result;
+		} else {
+			console.log("cannot rotate matrix with number of rows other than 2 or 3");
+			return;
+		}
+	}
+
+	static rotate2D(matrix, angle) {
+		if (matrix.rows !== 2) {
+			console.log("cannot rotate matrix with number of rows other than 2 with this function, try functions rotate3D or rotate");
+			return;
+		} else {
+			return Matrix.multiply(Matrix.rotationMatrix2x2(angle), matrix);
+		}
+	}
+
+	static rotate3D(matrix, ax, ay, az) {
+		if (matrix.rows !== 3) {
+			console.log("cannot rotate matrix with number of rows other than 3 with this function, try functions rotate3D or rotate");
+			return;
+		} else {
+			return Matrix.multiply(Matrix.rotationMatrix3x3(ax, ay, az), matrix);
+		}
+	}
+
+	static rotationMatrix2x2(angle) {
+		let result = new Matrix(2, 2);
+		let toRad = angle * 0.0174533;
+		result.setRow(0, [Math.cos(toRad), -Math.sin(toRad)]);
+		result.setRow(1, [Math.sin(toRad), Math.cos(toRad)]);
+		return result;
+	}
+
+	static rotationMatrix3x3(angleX, angleY, angleZ) {
+		let result = new Matrix(3, 3);
+		let toRadX = angleX * 0.0174533;
+		let toRadY = angleY * 0.0174533;
+		let toRadZ = angleZ * 0.0174533;
+		result.setRow(0, [Math.cos(toRadZ) * Math.cos(toRadY), Math.cos(toRadZ) * Math.sin(toRadY) * Math.sin(toRadX) - Math.sin(toRadZ) * Math.cos(toRadX), Math.cos(toRadZ) * Math.sin(toRadY) * Math.cos(toRadX) + Math.sin(toRadZ) * Math.sin(toRadX)]);
+		result.setRow(1, [Math.sin(toRadZ) * Math.cos(toRadY), Math.sin(toRadZ) * Math.sin(toRadY) * Math.sin(toRadX) - Math.cos(toRadZ) * Math.cos(toRadX), Math.sin(toRadZ) * Math.sin(toRadY) * Math.cos(toRadX) - Math.cos(toRadZ) * Math.sin(toRadX)]);
+		result.setRow(2, [-Math.sin(toRadY), Math.cos(toRadY) * Math.sin(toRadX), Math.cos(toRadY) * Math.cos(toRadX)]);
+		return result;
+	}
+
 	add(value) {
 		if (value instanceof Matrix) {
 			if (value.rows !== this.rows || value.cols !== this.cols) {
