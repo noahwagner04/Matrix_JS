@@ -346,7 +346,7 @@ class Matrix {
 		let toRadY = angleY * 0.0174533;
 		let toRadZ = angleZ * 0.0174533;
 		result.setRow(0, [Math.cos(toRadZ) * Math.cos(toRadY), Math.cos(toRadZ) * Math.sin(toRadY) * Math.sin(toRadX) - Math.sin(toRadZ) * Math.cos(toRadX), Math.cos(toRadZ) * Math.sin(toRadY) * Math.cos(toRadX) + Math.sin(toRadZ) * Math.sin(toRadX)]);
-		result.setRow(1, [Math.sin(toRadZ) * Math.cos(toRadY), Math.sin(toRadZ) * Math.sin(toRadY) * Math.sin(toRadX) - Math.cos(toRadZ) * Math.cos(toRadX), Math.sin(toRadZ) * Math.sin(toRadY) * Math.cos(toRadX) - Math.cos(toRadZ) * Math.sin(toRadX)]);
+		result.setRow(1, [Math.sin(toRadZ) * Math.cos(toRadY), Math.sin(toRadZ) * Math.sin(toRadY) * Math.sin(toRadX) + Math.cos(toRadZ) * Math.cos(toRadX), Math.sin(toRadZ) * Math.sin(toRadY) * Math.cos(toRadX) - Math.cos(toRadZ) * Math.sin(toRadX)]);
 		result.setRow(2, [-Math.sin(toRadY), Math.cos(toRadY) * Math.sin(toRadX), Math.cos(toRadY) * Math.cos(toRadX)]);
 		return result;
 	}
