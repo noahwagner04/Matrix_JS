@@ -10,7 +10,7 @@ class Matrix {
 			console.log("cannot set column at unexisting index");
 			return;
 		} else if (data.length !== this.rows) {
-			console.log("cannot set column of length longer than matrix column length");
+			console.log("cannot set column of length other than matrix column length");
 			return;
 		} else {
 			this.map((e, i, j) => {
@@ -46,7 +46,7 @@ class Matrix {
 			console.log("cannot set row at unexisting index");
 			return;
 		} else if (data.length !== this.cols) {
-			console.log("cannot set row of length longer than matrix row length");
+			console.log("cannot set row of length other than matrix row length");
 			return;
 		} else {
 			this.map((e, i, j) => {
