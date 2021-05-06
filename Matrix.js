@@ -167,9 +167,6 @@ class Matrix {
 		if (this.rows !== this.cols) {
 			console.log("cannot invert a non square matrix");
 			return;
-		} else if (Matrix.getDeterminantOf(this) === 0) {
-			console.log("cannot invert a matrix with determinant of 0");
-			return;
 		} else {
 			let result = Matrix.identity(this.rows);
 			for (let i = 0; i < this.cols; i++) {
@@ -204,9 +201,6 @@ class Matrix {
 	static getInverseOf(matrix) {
 		if (matrix.rows !== matrix.cols) {
 			console.log("cannot invert a non square matrix");
-			return;
-		} else if (Matrix.getDeterminantOf(matrix) === 0) {
-			console.log("cannot invert a matrix with determinant of 0");
 			return;
 		} else {
 			let result = Matrix.identity(matrix.rows);
