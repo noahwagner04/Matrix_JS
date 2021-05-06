@@ -141,7 +141,7 @@ invert
 ```js
 /*
 invert
-inverts this matrix using reduced row elimination
+inverts this matrix using reduced row elimination (assumes the matrix can be invertable)
     params
         none
     return value
@@ -188,6 +188,20 @@ scales one row then adds it to another, only changing the row added to (r1)  (on
         (Matrix) returns this matrix
 */
 myMatrix.addMultipleOfRow(1, 2, -0.3);
+```
+rotate
+```js
+/*
+rotate
+rotates this matrix around the  x, y, and z axis (matrix must have 2 or 3 rows)
+    params
+        (float) ax - the angle to rotate around the x axis
+        (float) ay - the angle to rotate around the y axis
+        (float) az - the angle to rotate around the z axis
+    return value
+        (Matrix) returns this matrix
+*/
+myMatrix.rotate(90, -20, 30);
 ```
 add
 ```js
@@ -298,13 +312,79 @@ getInverseOf
 ```js
 /*
 getInverseOf
-gets the inverse of any sized square matrix
+gets the inverse of any sized square matrix (assumes the matrix can be invertable)
     params
         (Matrix) matrix - the matrix to get the inverse of
     return value
         (Matrix) returns the inverse of the specified matrix
 */
 let inv = Matrix.getInverseOf(myMatrix);
+```
+rotate
+```js
+/*
+rotate
+rotates a matrix around the x, y, and z axis (matrix must have 2 or 3 rows)
+    params
+        (float) ax - the angle to rotate around the x axis
+        (float) ay - the angle to rotate around the y axis
+        (float) az - the angle to rotate around the z axis
+    return value
+        (Matrix) returns the newly rotated matrix
+*/
+let rotatedMatrix = Matrix.rotate(myMatrix, 90, -20, 30);
+```
+rotate2D
+```js
+/*
+rotate2D
+rotates a 2d matrix by a provided angle (matrix must have 2 rows)
+    params
+        (float) a - the angle to rotate the 2D matrix by
+    return value
+        (Matrix) returns the newly rotated matrix
+*/
+let rotatedMatrix = Matrix.rotate2D(myMatrix, 90);
+```
+rotate3D
+```js
+/*
+rotate3D
+rotates a 3D matrix around the x, y, and z axis (matrix must have 3 rows)
+    params
+        (float) ax - the angle to rotate around the x axis
+        (float) ay - the angle to rotate around the y axis
+        (float) az - the angle to rotate around the z axis
+    return value
+        (Matrix) returns the newly rotated matrix
+*/
+let rotatedMatrix = Matrix.rotate3D(myMatrix, 90, -20, 30);
+```
+rotationMatrix2x2
+```js
+/*
+rotationMatrix2x2
+returns the 2x2 rotation matrix of a certain angle
+    params
+        (float) a - the angle to set the rotation matrix at
+    return value
+        (Matrix) returns the newly rotated matrix
+*/
+let rotationMatrix90Deg = Matrix.rotationMatrix2x2(90);
+```
+rotationMatrix3x3
+```js
+/*
+rotationMatrix3x3
+returns the 3x3 rotation matrix of a certain x, y, and z rotation.
+    params
+        (float) ax - the rotation about the x axis to set the matrix at
+        (float) ay - the rotation about the y axis to set the matrix at
+        (float) az - the rotation about the z axis to set the matrix at
+    return value
+        (Matrix) returns the newly rotated matrix
+*/
+let rotationMatrix = Matrix.rotationMatrix3x3(90, -20, 30);
 ```
 add
 ```js
