@@ -41,6 +41,19 @@ class Matrix {
 		return result;
 	}
 
+	addColumn(data) {
+		if(data.length !== this.rows) {
+			console.log("cannot add invalid column");
+			return;
+		} else {
+			for (let i = 0; i < this.rows; i++) {
+				this.data[i].push(data[i]);
+			}
+			this.cols++;
+			return this;
+		}
+	}
+
 	setRow(index, data) {
 		if (index >= this.rows || index < 0) {
 			console.log("cannot set row at unexisting index");
@@ -75,6 +88,17 @@ class Matrix {
 			}
 		}
 		return result;
+	}
+
+	addRow(data) {
+		if(data.length !== this.cols) {
+			console.log("cannot add invalid row");
+			return;
+		} else {
+			this.data.push(data);
+			this.rows++;
+			return this;
+		}
 	}
 
 	static getDeterminantOf(matrix) {
@@ -229,6 +253,30 @@ class Matrix {
 				}
 			}
 			return result;
+		}
+	}
+
+	invertAffinity() {
+		if (this.rows !== 4 || this.cols !== 4) {
+			console.log("cannot invert a non transformation matrix using this function, try using invert or getInverseOf functions");
+			return;
+		} else {
+			let rotationInv = Matrix.transpose(this.ignoreRowColumn(3, 3)).addColumn([0, 0, 0]).addRow([0, 0, 0, 1]);
+			let translationInv = Matrix.identity(4).setColumn(3, [-this.data[0][3], -this.data[1][3], -this.data[2][3], 1]);
+			let inverse = Matrix.multiply(rotationInv, translationInv);
+			this.data = inverse.data;
+			return this;
+		}
+	}
+
+	static getInverseOfAffinity(matrix) {
+		if (matrix.rows !== 4 || matrix.cols !== 4) {
+			console.log("cannot invert a non transformation matrix using this function, try using invert or getInverseOf functions");
+			return;
+		} else {
+			let rotationInv = Matrix.transpose(matrix.ignoreRowColumn(3, 3)).addColumn([0, 0, 0]).addRow([0, 0, 0, 1]);
+			let translationInv = Matrix.identity(4).setColumn(3, [-matrix.data[0][3], -matrix.data[1][3], -matrix.data[2][3], 1]);
+			return Matrix.multiply(rotationInv, translationInv);
 		}
 	}
 
