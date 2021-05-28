@@ -377,8 +377,10 @@ class Matrix {
 	static rotationMatrix2x2(angle) {
 		let result = new Matrix(2, 2);
 		let toRad = angle * 0.0174533;
-		result.setRow(0, [Math.cos(toRad), -Math.sin(toRad)]);
-		result.setRow(1, [Math.sin(toRad), Math.cos(toRad)]);
+		let sinAng = Math.sin(toRad);
+		let cosAng = Math.cos(toRad);
+		result.setRow(0, [cosAng, -sinAng]);
+		result.setRow(1, [sinAng, cosAng]);
 		return result;
 	}
 
@@ -387,9 +389,15 @@ class Matrix {
 		let toRadX = angleX * 0.0174533;
 		let toRadY = angleY * 0.0174533;
 		let toRadZ = angleZ * 0.0174533;
-		result.setRow(0, [Math.cos(toRadZ) * Math.cos(toRadY), Math.cos(toRadZ) * Math.sin(toRadY) * Math.sin(toRadX) - Math.sin(toRadZ) * Math.cos(toRadX), Math.cos(toRadZ) * Math.sin(toRadY) * Math.cos(toRadX) + Math.sin(toRadZ) * Math.sin(toRadX)]);
-		result.setRow(1, [Math.sin(toRadZ) * Math.cos(toRadY), Math.sin(toRadZ) * Math.sin(toRadY) * Math.sin(toRadX) + Math.cos(toRadZ) * Math.cos(toRadX), Math.sin(toRadZ) * Math.sin(toRadY) * Math.cos(toRadX) - Math.cos(toRadZ) * Math.sin(toRadX)]);
-		result.setRow(2, [-Math.sin(toRadY), Math.cos(toRadY) * Math.sin(toRadX), Math.cos(toRadY) * Math.cos(toRadX)]);
+		let sinX = Math.sin(toRadX);
+		let cosX = Math.cos(toRadX);
+		let sinY = Math.sin(toRadY);
+		let cosY = Math.cos(toRadY);
+		let sinZ = Math.sin(toRadZ);
+		let cosZ = Math.cos(toRadZ);
+		result.setRow(0, [cosZ * cosY, cosZ * sinY * sinX - sinZ * cosX, cosZ * sinY * cosX + sinZ * sinX]);
+		result.setRow(1, [sinZ * cosY, sinZ * sinY * sinX + cosZ * cosX, sinZ * sinY * cosX - cosZ * sinX]);
+		result.setRow(2, [-sinY, cosY * sinX, cosY * cosX]);
 		return result;
 	}
 
